@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Script Generator and Content Scheduler for Wellness Centre</title>
+  <meta name="description" content="AI Content Automation and Lead Generation tailored for premium Wellness Centres. Built with Google Gemini.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Settings Backdrop -->
+  <div class="settings-backdrop" id="settingsBackdrop" style="display: none;"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <!-- Elegant Custom Lotus SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="brand-logo">
+          <path d="M32 12C32 12 26 28 32 52C38 28 32 12 32 12Z" fill="rgba(197, 168, 128, 0.15)"/>
+          <path d="M32 24C24 26 18 36 22 48C28 48 32 36 32 24Z" fill="rgba(197, 168, 128, 0.08)"/>
+          <path d="M32 24C40 26 46 36 42 48C36 48 32 36 32 24Z" fill="rgba(197, 168, 128, 0.08)"/>
+          <path d="M32 32C18 32 10 42 14 52C24 52 32 42 32 32Z" fill="rgba(78, 94, 71, 0.15)"/>
+          <path d="M32 32C46 32 54 42 50 52C40 52 32 42 32 32Z" fill="rgba(78, 94, 71, 0.15)"/>
+          <path d="M20 54C26 58 38 58 44 54" />
+        </svg>
+        <div class="brand-text">
+          <h1>Script Generator and Content Scheduler for Wellness Centre</h1>
+        </div>
+      </div>
+      
+      <!-- API status indicator & Settings Trigger -->
+      <div class="api-indicator-wrapper">
+        <div class="api-indicator warning" id="apiIndicator">
+          <span class="api-status-dot"></span>
+          <span id="apiStatusText">Setup API Key</span>
+        </div>
+        
+        <!-- Dropdown Key Manager -->
+        <div class="api-settings-dropdown" id="apiSettingsDropdown" style="display: none;">
+          <h4 style="font-family: var(--font-heading); color: var(--color-gold); margin-bottom: 0.5rem; font-size: 1.1rem;">Gemini AI Key</h4>
+          <p style="font-size: 0.75rem; color: var(--color-sage); margin-bottom: 1rem;">Set your Google Gemini API key to activate live AI generations.</p>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <input type="password" class="form-control" id="apiKeyInput" placeholder="AIzaSy..." style="padding: 0.6rem 0.8rem; font-size: 0.85rem;">
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn" id="saveKeyBtn" style="padding: 0.5rem; font-size: 0.85rem;">Save</button>
+            <button class="btn btn-secondary" id="clearKeyBtn" style="padding: 0.5rem; font-size: 0.85rem;">Clear</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-navigation">
+      <button class="tab-btn active" data-tab="content-engine">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v12a2 2 0 01-2 2z"></path><path d="M12 11l-3 3 3 3"></path><path d="M9 14h6a3 3 0 003-3V9"></path></svg>
+        Content Engine
+      </button>
+      <button class="tab-btn" data-tab="thumbnail-strategist">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>
+        Thumbnail Strategist
+      </button>
+      <button class="tab-btn" data-tab="auto-scheduler">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        Auto-Scheduler
+      </button>
+      <button class="tab-btn" data-tab="comment-manager">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Comment Manager & Leads
+      </button>
+    </nav>
+
+    <!-- CONTENT PANELS -->
+
+    <!-- PANEL 1: Content Engine -->
+    <div class="tab-panel active" id="content-engine">
+      <div class="panel-grid">
+        <!-- Input Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Script Generator</h2>
+            <p class="card-subtitle">Generate NLP-anchored short-form video scripts</p>
+          </div>
+          
+          <form id="scriptForm">
+            <div class="form-group">
+              <label for="videoTopic">Video Topic / Core Theme</label>
+              <textarea class="form-control" id="videoTopic" placeholder="e.g., How to handle stage fright using NLP anchor techniques, or Finding calmness under corporate pressure." required></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="targetAudience">Target Audience</label>
+              <select class="form-control" id="targetAudience">
+                <option value="Professionals seeking stress relief & clarity">Corporate Professionals (Stress Relief & Focus)</option>
+                <option value="Students dealing with exam anxiety and focus">Students (Academic Anxiety & Clarity)</option>
+                <option value="Aspirants looking for NLP certification / Training Batch 17">NLP Batch 17 Applicants (Career & Certification)</option>
+                <option value="Individuals seeking emotional healing and self-discovery">Individuals Seeking Self-Discovery (Mental Peace)</option>
+              </select>
+            </div>
+            
+            <button type="submit" class="btn" id="generateScriptBtn">
+              <span>Generate Wellness Script</span>
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"></path></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- AI Output Card -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Generated Script</h2>
+            <p class="card-subtitle">Copy or schedule this script for production</p>
+          </div>
+          
+          <div class="ai-output-box" id="scriptOutputBox">
+            <div class="ai-output-placeholder" id="scriptPlaceholder">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
+              <p>Your AI-generated video script will appear here.<br>Enter a topic and click "Generate Wellness Script".</p>
+            </div>
+            
+            <div id="scriptContentArea" style="display: none;">
+              <div class="output-header">
+                <span class="output-label" id="scriptModelLabel">DEMO MODE</span>
+                <button class="copy-btn" id="copyScriptBtn">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                  <span>Copy Script</span>
+                </button>
+              </div>
+              <div class="script-content" id="scriptText"></div>
+              
+              <div style="margin-top: 2rem;">
+                <button class="btn btn-secondary" id="sendToSchedulerBtn">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <span>Send to Auto-Scheduler</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: Thumbnail Strategist -->
+    <div class="tab-panel" id="thumbnail-strategist">
+      <div class="panel-grid">
+        <!-- Input Form -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Thumbnail Strategist</h2>
+            <p class="card-subtitle">Generate structured, high-end prompts for Midjourney/DALL-E</p>
+          </div>
+          
+          <form id="thumbnailForm">
+            <div class="form-group">
+              <label for="thumbTopic">Video Topic / Focus</label>
+              <textarea class="form-control" id="thumbTopic" placeholder="e.g., Finding inner peace amid career anxiety." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn" id="generateThumbBtn">
+              <span>Design Thumbnail Prompt</span>
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Prompt Output -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Aesthetic Prompt & Preview</h2>
+            <p class="card-subtitle">Studio Look: Olive Green, Gold & White Theme</p>
+          </div>
+          
+          <div class="ai-output-box" id="thumbOutputBox">
+            <div class="ai-output-placeholder" id="thumbPlaceholder">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg>
+              <p>Your prompt will appear here.<br>Enter a topic and click "Design Thumbnail Prompt".</p>
+            </div>
+            
+            <div id="thumbContentArea" style="display: none;" class="thumbnail-preview-container">
+              <div class="output-header">
+                <span class="output-label" id="thumbModelLabel">OPTIMIZED PROMPT</span>
+                <button class="copy-btn" id="copyPromptBtn">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                  <span>Copy Prompt</span>
+                </button>
+              </div>
+              
+              <div class="prompt-box" id="promptText"></div>
+              
+              <div class="form-group">
+                <label>Aesthetic Mood Preview</label>
+                <div class="thumbnail-visual-mock" id="thumbVisualMock" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 250px; border-radius: 12px;">
+                  <div class="thumbnail-art-inner" id="thumbMockInner" style="z-index: 2; position: relative; background: rgba(8, 19, 16, 0.55); padding: 1.5rem; border-radius: 12px; backdrop-filter: blur(2px); border: 1px solid rgba(197, 168, 128, 0.25); text-shadow: 0 2px 10px rgba(0,0,0,0.8);">
+                    <h3 id="mockTitle">Finding Peace</h3>
+                    <p>Wellness Centre</p>
+                  </div>
+                  <img id="generatedThumbImg" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; z-index: 1;" alt="Generated Thumbnail">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: Auto-Scheduler -->
+    <div class="tab-panel" id="auto-scheduler">
+      <div class="panel-grid">
+        <!-- Schedule Form -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Schedule a Post</h2>
+            <p class="card-subtitle">Queue generated scripts to your social media channels</p>
+          </div>
+          
+          <form id="schedulerForm">
+            <div class="form-group">
+              <label for="schedTopic">Post Title / Topic</label>
+              <input type="text" class="form-control" id="schedTopic" placeholder="e.g., Finding peace in anxiety" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedCaption">Caption / AI Response Details</label>
+              <textarea class="form-control" id="schedCaption" placeholder="Write caption copy or paste script parts here..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedPlatform">Publishing Channel</label>
+              <select class="form-control" id="schedPlatform">
+                <option value="Instagram">Instagram Reels</option>
+                <option value="YouTube">YouTube Shorts</option>
+                <option value="TikTok">TikTok</option>
+                <option value="Facebook">Facebook Reels</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="schedTime">Scheduled Date & Time</label>
+              <input type="datetime-local" class="form-control" id="schedTime" required>
+            </div>
+            
+            <button type="submit" class="btn" id="scheduleBtn">
+              <span>Queue Post</span>
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Queue List -->
+        <div class="card">
+          <div class="card-header scheduler-header">
+            <div>
+              <h2 class="card-title">Automation Queue</h2>
+              <p class="card-subtitle">Active and published scheduled posts</p>
+            </div>
+            <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem;" id="refreshQueueBtn">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.27 7.9M20 9h5V4"></path></svg>
+            </button>
+          </div>
+          
+          <div class="scheduler-list" id="queueList">
+            <!-- Dynamic elements loaded via app.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 4: Comment Manager -->
+    <div class="tab-panel" id="comment-manager">
+      <div class="panel-grid" style="grid-template-columns: 1.2fr 1.8fr;">
+        <!-- Left: Inbox List -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Comment Inbox</h2>
+            <p class="card-subtitle">Incoming user comments from community posts</p>
+          </div>
+          
+          <!-- Test Comment Creator -->
+          <form id="newCommentForm" class="add-comment-bar">
+            <input type="text" class="form-control" id="newCommentText" placeholder="Add custom comment to test rules..." required>
+            <button type="submit" class="btn" style="width: auto; white-space: nowrap; padding: 0 1.2rem;">Add Test</button>
+          </form>
+          
+          <div class="comment-inbox" id="commentInboxContainer">
+            <!-- Loaded via app.js -->
+          </div>
+        </div>
+
+        <!-- Right: AI Reply Workspace -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">AI Reply Workspace</h2>
+            <p class="card-subtitle">Manage extracted leads and empathy responses</p>
+          </div>
+          
+          <div id="workspaceWorkspace">
+            <!-- Workspace Content Placeholder -->
+            <div class="workspace-placeholder" id="workspacePlaceholder">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.625.625 0 11-1.25 0 .625.625 0 011.25 0zm4.5 0a.625.625 0 11-1.25 0 .625.625 0 011.25 0zm4.5 0a.625.625 0 11-1.25 0 .625.625 0 011.25 0zM21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+              <p>Select a comment from the inbox to analyze and generate replies.</p>
+            </div>
+            
+            <!-- Active Workspace (shown dynamically) -->
+            <div class="comment-workspace-content" id="workspaceContent" style="display: none;">
+              <div class="comment-card" id="selectedCommentDetailCard" style="background: rgba(255,255,255,0.01);">
+                <!-- Comment detailed text populated by JS -->
+              </div>
+              
+              <button class="btn" id="analyzeCommentBtn">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span>Analyze Comment with Gemini</span>
+              </button>
+
+              <div class="analyzed-reply-box" id="replyBox" style="display: none;">
+                <div class="output-header">
+                  <div>
+                    <span class="output-label">AI PROPOSED REPLY</span>
+                    <div style="margin-top: 0.3rem;">
+                      Classification: <span id="workspaceBadge" class="comment-badge"></span>
+                    </div>
+                  </div>
+                  <button class="copy-btn" id="copyReplyBtn">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                    <span>Copy Reply</span>
+                  </button>
+                </div>
+                
+                <textarea class="reply-textarea" id="workspaceReplyText"></textarea>
+                
+                <button class="btn" style="margin-top: 1rem;" id="approveReplyBtn">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+                  <span>Approve & Send Reply</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
